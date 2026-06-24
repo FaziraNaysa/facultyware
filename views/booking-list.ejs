@@ -13,7 +13,22 @@
         <% } %>
     </div>
 
-    <div class="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+    <!-- Search Form -->
+    <div class="flex items-center justify-between gap-4">
+        <form action="/bookings" method="GET" class="flex items-center gap-2 w-full max-w-sm">
+            <input type="text" name="search" placeholder="Cari nama peminjam, ruangan, atau keperluan..." value="<%= typeof search !== 'undefined' ? search : '' %>" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring dark:border-zinc-800" />
+            <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 border dark:border-zinc-800 h-9 px-4">
+                Cari
+            </button>
+            <% if (typeof search !== 'undefined' && search) { %>
+                <a href="/bookings" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 dark:border-zinc-800">
+                    Batal
+                </a>
+            <% } %>
+        </form>
+    </div>
+
+    <div class="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden dark:border-zinc-800">
         <div class="relative w-full overflow-auto">
             <table class="w-full text-sm">
                 <thead class="bg-muted/50 border-b">
@@ -30,8 +45,8 @@
                 <tbody>
                     <% if (bookings && bookings.length > 0) { %>
                         <% bookings.forEach(function(booking, index) { %>
-                            <tr class="border-b hover:bg-muted/50">
-                                <td class="p-4"><%= index + 1 %></td>
+                            <tr class="border-b hover:bg-muted/50 dark:border-zinc-800">
+                                <td class="p-4"><%= (currentPage - 1) * limit + index + 1 %></td>
                                 <td class="p-4 font-medium"><%= booking.borrower_name %></td>
                                 <td class="p-4"><%= booking.room_name %></td>
                                 <td class="p-4 text-muted-foreground">
@@ -103,4 +118,32 @@
             </table>
         </div>
     </div>
+
+    <!-- Pagination Controls -->
+    <% if (totalPages > 1) { %>
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-2 text-xs text-muted-foreground">
+            <span>
+                Menampilkan halaman <strong><%= currentPage %></strong> dari <strong><%= totalPages %></strong> (Total <strong><%= totalRows %></strong> data)
+            </span>
+            <div class="flex items-center gap-1">
+                <% if (currentPage > 1) { %>
+                    <a href="/bookings?page=<%= currentPage - 1 %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>" class="inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent h-8 px-3 dark:border-zinc-800">
+                        Sebelumnya
+                    </a>
+                <% } %>
+                
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="/bookings?page=<%= i %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>" class="inline-flex items-center justify-center rounded-md <%= currentPage === i ? 'bg-primary text-primary-foreground font-bold' : 'border border-input bg-background hover:bg-accent dark:border-zinc-800' %> h-8 w-8">
+                        <%= i %>
+                    </a>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <a href="/bookings?page=<%= currentPage + 1 %><%= typeof search !== 'undefined' && search ? '&search=' + encodeURIComponent(search) : '' %>" class="inline-flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent h-8 px-3 dark:border-zinc-800">
+                        Selanjutnya
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
 </div>

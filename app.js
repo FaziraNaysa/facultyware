@@ -9,6 +9,7 @@ var expressLayouts = require('express-ejs-layouts');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bookingRouter = require('./routes/bookingRoutes');
+var apiRouter = require('./routes/apiRoutes');
 const { notFoundHandler, errorHandler } = require('./middlewares/error');
 
 var app = express();
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bookings', bookingRouter); // Seluruh submenu booking diatur via bookingRouter
+app.use('/api', apiRouter);
 
 // 4. PENANGANAN ERROR GLOBAL
 app.use(notFoundHandler);
