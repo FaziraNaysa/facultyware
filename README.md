@@ -35,7 +35,8 @@ Buat berkas bernama `.env` pada root direktori proyek dan konfigurasikan dengan 
 DB_HOST=localhost
 DB_USER=root
 DB_PASS=password_mysql_anda
-DB_NAME=facultyware
+DB_NAME=facultywarefix
+
 PORT=3000
 ```
 
